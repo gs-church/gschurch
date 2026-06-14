@@ -28,12 +28,12 @@
     <iframe id="app-frame" src=""></iframe>
 
     <script>
-        // 스마트폰에 저장된 아이디 꺼내기 (요금관리 전용)
-        const rememberedId = localStorage.getItem('gs_utility_saved_id') || '';
+        // 💡 쿠키 매니저의 기본 키값인 'util_saved_id'와 완벽 매칭 동기화
+        const rememberedId = localStorage.getItem('util_saved_id') || '';
         const streamlitUrl = "https://gschurch-fees.streamlit.app/";
         const frame = document.getElementById('app-frame');
         
-        // 💡 핵심 4: 스트림릿 앱을 불러올 때도 "무조건 밝은 모드로 켜져라"(&theme.base=light)라고 명령합니다.
+        // 무조건 밝은 테마 명령 고정
         let targetUrl = streamlitUrl + "?embed=true&theme.base=light";
         
         if (rememberedId) {
@@ -41,13 +41,13 @@
         }
         frame.src = targetUrl;
 
-        // 아이디 저장/삭제 신호 수신기
+        // 아이디 저장/삭제 신호 수신기 (window.top.postMessage 신호 전용 규격 개편)
         window.addEventListener('message', function(event) {
             if (event.data && event.data.type === 'SAVE_ID') {
-                localStorage.setItem('gs_utility_saved_id', event.data.id);
+                localStorage.setItem('util_saved_id', event.data.id);
             }
             if (event.data && event.data.type === 'DELETE_ID') {
-                localStorage.removeItem('gs_utility_saved_id');
+                localStorage.removeItem('util_saved_id');
             }
         });
     </script>
