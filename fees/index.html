@@ -2,9 +2,6 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="color-scheme" content="light">
-    <meta name="supported-color-schemes" content="light">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>선한목자교회 요금관리</title>
 
@@ -19,8 +16,12 @@
         body, html {
             margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #ffffff;
         }
+        /* 💡 다크모드 설정 시 액자 창 배경색도 부드러운 다크톤으로 자연스럽게 전환 */
+        @media (prefers-color-scheme: dark) {
+            body, html { background-color: #0e1117; } 
+        }
         iframe {
-            width: 100%; height: 100%; border: none; background-color: #ffffff;
+            width: 100%; height: 100%; border: none; background-color: transparent;
         }
     </style>
 </head>
@@ -33,15 +34,15 @@
         const streamlitUrl = "https://gschurch-fees.streamlit.app/";
         const frame = document.getElementById('app-frame');
         
-        // 무조건 밝은 테마 명령 고정
-        let targetUrl = streamlitUrl + "?embed=true&theme.base=light";
+        // 강제 밝은 모드 명령어 싹 삭제 (이제 기기 설정에 맞춰 자동 변경됩니다.)
+        let targetUrl = streamlitUrl + "?embed=true";
         
         if (rememberedId) {
             targetUrl += "&saved_id=" + encodeURIComponent(rememberedId);
         }
         frame.src = targetUrl;
 
-        // 아이디 저장/삭제 신호 수신기 (window.top.postMessage 신호 전용 규격 개편)
+        // 아이디 저장/삭제 신호 수신기 (app.py 내부의 window.top.postMessage 규격과 일치화)
         window.addEventListener('message', function(event) {
             if (event.data && event.data.type === 'SAVE_ID') {
                 localStorage.setItem('util_saved_id', event.data.id);
