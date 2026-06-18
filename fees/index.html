@@ -2,12 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>선한목자교회 요금관리</title>
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="mobile-web-app-capable" content="yes">
     
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" href="logo.png">
@@ -21,15 +17,14 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 👆 최초 접속 시 목사님이 요청하신 터치 안내 화면 */
-        #touch-trigger-screen {
+        /* 👆 최초 접속 시 보여줄 시작 화면 레이아웃 */
+        #welcome-screen {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             background-color: #f8fafc;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             z-index: 99999;
-            cursor: pointer;
             padding: 20px; box-sizing: border-box;
             text-align: center;
         }
@@ -41,52 +36,42 @@
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
         }
 
-        /* ✍️ 요청하신 타이틀 문구 */
+        /* ✍️ 요구사항: 타이틀만 깔끔하게 유지 */
         .title {
-            font-size: 21px; font-weight: bold; color: #1e293b; margin-bottom: 12px;
+            font-size: 22px; font-weight: bold; color: #1e293b; margin-bottom: 32px;
         }
 
-        /* ✍️ 요청하신 터치 실행 안내 문구 */
-        .description {
-            font-size: 15px; color: #475569; font-weight: 500; line-height: 1.6; margin-bottom: 30px;
-        }
-
-        /* 터치 유도 애니메이션 버튼 */
-        .touch-action-btn {
+        /* ✍️ 요구사항: 오직 이 버튼을 '클릭'했을 때만 실행되도록 변경 */
+        .start-btn {
             background-color: #2563eb;
-            color: white; font-weight: bold; font-size: 14px;
-            padding: 14px 32px; border-radius: 30px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-            animation: pulse 2s infinite;
+            color: white; font-weight: bold; font-size: 15px;
+            border: none;
+            padding: 14px 48px; border-radius: 30px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
         }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.04); }
-            100% { transform: scale(1); }
+        .start-btn:active {
+            background-color: #1d4ed8; transform: scale(0.97);
         }
     </style>
 </head>
 <body>
 
-    <div id="touch-trigger-screen" onclick="startAppDirectly()">
+    <div id="welcome-screen">
         <img src="logo.png" alt="교회 로고" class="logo">
         <div class="title">선한목자교회 요금관리</div>
-        <div class="description">
-            화면을 터치하여 실행합니다.
-        </div>
-        <div class="touch-action-btn">
-            👆 터치하여 시스템 시작하기
-        </div>
+        
+        <button class="start-btn" onclick="launchAppDirectly()">시작하기</button>
     </div>
 
     <script>
-        // 🔗 선한목자교회 스트림릿 클라우드 고유 주소
+        // 🔗 선한목자교회 스트림릿 클라우드 고유 주소 유지
         const STREAMLIT_URL = "https://gschurch-fees.streamlit.app/"; 
 
-        function startAppDirectly() {
-            // 🚀 핵심 수정: iframe을 사용하지 않고, 현재 홈 앱 창의 주소 자체를 스트림릿으로 다이렉트 전환합니다.
-            // 이렇게 하면 독립된 단일 브라우저 세션으로 인식되어 쿠키 보안 차단(리디렉션 에러)이 완벽히 해결됩니다.
+        function launchAppDirectly() {
+            // 🚀 핵심: <iframe>을 전혀 쓰지 않고 브라우저 창 자체를 이동시킵니다.
+            // 이로 인해 상단바는 노출되지만, '너무 여러 번 리디렉션되었습니다' 에러가 100% 영구 해결됩니다.
             window.location.href = STREAMLIT_URL;
         }
     </script>
