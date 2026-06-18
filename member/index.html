@@ -21,12 +21,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 📱 실제 스트림릿 앱 영역 (터치 전에는 숨김) */
-        #app-iframe {
-            width: 100%; height: 100%; border: none;
-            display: none;
-        }
-
         /* 👆 최초 접속 시 목사님이 요청하신 터치 안내 화면 */
         #touch-trigger-screen {
             position: fixed; top: 0; left: 0;
@@ -57,7 +51,7 @@
             font-size: 15px; color: #475569; font-weight: 500; line-height: 1.6; margin-bottom: 30px;
         }
 
-        /* 손가락 터치를 부드럽게 유도하는 안내 버튼 스타일 */
+        /* 터치 유도 애니메이션 버튼 */
         .touch-action-btn {
             background-color: #2563eb;
             color: white; font-weight: bold; font-size: 14px;
@@ -75,7 +69,7 @@
 </head>
 <body>
 
-    <div id="touch-trigger-screen" onclick="startAppInApp()">
+    <div id="touch-trigger-screen" onclick="startAppDirectly()">
         <img src="logo.png" alt="교회 로고" class="logo">
         <div class="title">선한목자교회 교적관리</div>
         <div class="description">
@@ -86,22 +80,14 @@
         </div>
     </div>
 
-    <iframe id="app-iframe" src=""></iframe>
-
     <script>
-        // 🔗 선한목자교회 스트림릿 클라우드 고유 주소 유지
+        // 🔗 선한목자교회 스트림릿 클라우드 고유 주소
         const STREAMLIT_URL = "https://gschurch.streamlit.app/"; 
 
-        function startAppInApp() {
-            const triggerScreen = document.getElementById('touch-trigger-screen');
-            const iframe = document.getElementById('app-iframe');
-            
-            // 1. 화면을 터치하는 순간, 빈 iframe에 주소를 강제로 밀어 넣어 '강제 새로고침'을 발생시킵니다.
-            iframe.src = STREAMLIT_URL;
-            
-            // 2. 터치 안내 화면을 스르륵 지우고 스트림릿 iframe 화면을 전체 화면으로 띄웁니다.
-            triggerScreen.style.display = 'none';
-            iframe.style.display = 'block';
+        function startAppDirectly() {
+            // 🚀 핵심 수정: iframe을 사용하지 않고, 현재 홈 앱 창의 주소 자체를 스트림릿으로 다이렉트 전환합니다.
+            // 이렇게 하면 독립된 단일 브라우저 세션으로 인식되어 쿠키 보안 차단(리디렉션 에러)이 완벽히 해결됩니다.
+            window.location.href = STREAMLIT_URL;
         }
     </script>
 </body>
